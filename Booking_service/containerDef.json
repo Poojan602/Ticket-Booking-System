@@ -1,0 +1,15 @@
+[   {      "name":"booking-container",
+      "image":"737443768027.dkr.ecr.us-east-1.amazonaws.com/booking-module:latest",
+      "cpu":128,
+      "portMappings":[         {
+            "protocol":"tcp",
+            "containerPort":5002,
+            "hostPort":5002
+
+}
+
+],
+      "memory":256,
+      "essential":true
+}
+]

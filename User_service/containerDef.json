@@ -1,0 +1,16 @@
+[   {      "name":"user-service-container",
+      "image":"737443768027.dkr.ecr.us-east-1.amazonaws.com/cloud_test:latest",
+      "cpu":128,
+      "portMappings":[         {
+            "protocol":"tcp",
+            "containerPort":5001,
+            "hostPort":5001
+
+}
+
+],
+      "memory":256,
+      "essential":true
+
+}
+]

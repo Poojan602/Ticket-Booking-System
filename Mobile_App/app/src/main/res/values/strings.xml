@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Tourister</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="placeimage">placeImage</string>
+    <string name="point_pleasant_park">Point pleasant park</string>
+    <string name="lorem">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</string>
+    <string name="user_id">User ID</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="Enter_otp">Enter Otp</string>
+    <string name="submit">Submit</string>
+    <string name="name">Name</string>
+    <string name="Register">Register</string>
+    <string name="new_user_click_here">New user? Click here</string>
+    <string name="Email">Email</string>
+    <string name="Date">Date</string>
+    <string name="Number_of_Passengers">Number of Passengers</string>
+    <string name="card_details">Card Details</string>
+    <string name="card_number">Card Number</string>
+    <string name="Year">Year</string>
+    <string name="Month">Month</string>
+    <string name="cvv">Cvv</string>
+    <string name="from">From</string>
+    <string name="payment">Payment</string>
+    <string name="places_to_visit">Places to Visit</string>
+    <string name="total">Total: %d</string>
+</resources>

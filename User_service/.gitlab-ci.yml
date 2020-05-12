@@ -1,0 +1,72 @@
+# image: docker:19.03.1
+
+variables:
+  # When using dind service, we need to instruct docker, to talk with
+  # the daemon started inside of the service. The daemon is available
+  # with a network connection instead of the default
+  # /var/run/docker.sock socket. docker:19.03.1 does this automatically
+  # by setting the DOCKER_HOST in
+  # https://github.com/docker-library/docker/blob/d45051476babc297257df490d22cbd806f1b11e4/19.03.1/docker-entrypoint.sh#L23-L29
+  #
+  # The 'docker' hostname is the alias of the service container as described at
+  # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services.
+  #
+  # Note that if you're using GitLab Runner 12.7 or earlier with the Kubernetes executor and Kubernetes 1.6 or earlier,
+  # the variable must be set to tcp://localhost:2376 because of how the
+  # Kubernetes executor connects services to the job container
+  # DOCKER_HOST: tcp://localhost:2376
+  #
+  # Specify to Docker where to create the certificates, Docker will
+  # create them automatically on boot, and will create
+  # `/certs/client` that will be shared between the service and job
+  # container, thanks to volume mount from config.toml
+  DOCKER_TLS_CERTDIR: "/certs"
+
+# services:
+#   - docker:19.03.1-dind
+
+stages:
+# - build_dev
+- route_test
+- deploy_dev
+
+
+route_test:
+  stage: route_test
+  image: python:3.7
+  before_script:
+     - apt-get update -qy
+     - apt-get install -y python-dev python-pip
+     - pip3 install -r requirements.txt
+     - pip3 install flask_wtf
+
+  script:
+     - python test_routes.py
+
+deploy_dev:
+  stage: deploy_dev
+  image: docker:19.03.1
+  services:
+    - docker:19.03.1-dind
+  script:
+  # Install python requirements
+  - apk update
+  - apk upgrade
+  - apk add util-linux pciutils usbutils coreutils binutils findutils grep
+  - apk add python python-dev py-pip
+  - apk add jq
+  # AWS configs
+  #- export AWS_ACCESS_KEY_ID='ASIA2XMYS43NZBCKPAFP'
+  #- export AWS_SECRET_ACCESS_KEY='KtQvCKiKh//6FCOgz86MXbl5TACY1X0r1sRCk2mk'
+
+  # Install awscli
+  - pip install awscli
+  - echo "Login to ECR Repository"
+  - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 737443768027.dkr.ecr.us-east-1.amazonaws.com/cloud_test
+  - echo "Preparation task"echo "Build Docker Image"
+  - docker build -t cloud_test .
+  - docker tag cloud_test:latest 737443768027.dkr.ecr.us-east-1.amazonaws.com/cloud_test:latest
+  - docker push 737443768027.dkr.ecr.us-east-1.amazonaws.com/cloud_test:latest
+#   - export TASK_VERSION=$(aws ecs --region us-east-1 register-task-definition --family userTesting --container-definitions file://containerDef.json | jq --raw-output '.taskDefinition.revision')
+#   - echo "ssss" ${TASK_VERSION}
+  - aws ecs update-service --region us-east-1 --cluster Project-test --service User-Service --force-new-deployment

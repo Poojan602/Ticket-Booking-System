@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="list_from">
+        <item>Halifax</item>
+        <item>Vancouver</item>
+        <item>Toronto</item>
+        <item>Montreal</item>
+        <item>Ottawa</item>
+        <item>Sydney</item>
+        <item>Quebec</item>
+        <item>Mississauga</item>
+    </array>
+
+</resources>
